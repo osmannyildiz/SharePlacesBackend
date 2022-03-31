@@ -1,0 +1,19 @@
+{
+	"name": "yourplaces-backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.mjs",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon app.mjs"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "^1.19.2",
+		"express": "^4.17.3"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	}
+}
