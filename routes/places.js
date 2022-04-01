@@ -1,5 +1,6 @@
 import express from "express";
 import { PLACES } from "../dummyData.js";
+import HttpError from "../models/httpError.js";
 
 const placesRouter = express.Router();
 
@@ -15,9 +16,7 @@ placesRouter.get("/", (req, res, next) => {
 
 	// if (!places) {  // Doesn't work
 	if (!places.length) {
-		const error = new Error("No place found.");
-		error.statusCode = 404;
-		return next(error);
+		return next(new HttpError(404, "No place found."));
 	}
 
 	return res.json({ ok: true, data: places });
@@ -29,9 +28,7 @@ placesRouter.get("/:id", (req, res, next) => {
 
 	const place = PLACES.find((place) => place.id === parseInt(id));
 	if (!place) {
-		const error = new Error("This place doesn't exist.");
-		error.statusCode = 404;
-		return next(error);
+		return next(new HttpError(404, "This place doesn't exist."));
 	}
 
 	return res.json({ ok: true, data: place });
