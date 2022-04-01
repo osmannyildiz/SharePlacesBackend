@@ -74,4 +74,15 @@ export function updatePlace(req, res, next) {
 
 export function deletePlace(req, res, next) {
 	const { id } = req.params;
+
+	// PLACES = PLACES.filter((place) => place.id !== id);
+
+	const placeIdx = PLACES.findIndex((place) => place.id === id);
+	if (placeIdx === -1) {
+		return next(new HttpError(404, "This place doesn't exist."));
+	}
+
+	PLACES.splice(placeIdx, 1);
+
+	return res.json({ ok: true });
 }
