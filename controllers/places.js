@@ -18,7 +18,7 @@ export function getPlaces(req, res, next) {
 	return res.json({ ok: true, data: places });
 }
 
-export function getPlaceById(req, res, next) {
+export function getPlace(req, res, next) {
 	const { id } = req.params;
 
 	const place = PLACES.find((place) => place.id === id);
@@ -43,4 +43,35 @@ export function createPlace(req, res, next) {
 	PLACES.push(place);
 
 	return res.status(201).json({ ok: true, data: place });
+}
+
+export function updatePlace(req, res, next) {
+	const { id } = req.params;
+
+	const placeIdx = PLACES.findIndex((place) => place.id === id);
+	if (placeIdx === -1) {
+		return next(new HttpError(404, "This place doesn't exist."));
+	}
+
+	// const updatedPlace = {
+	// 	...PLACES[placeIdx],
+	// 	title: req.body.title,
+	// 	description: req.body.description,
+	// };
+	// PLACES[placeIdx] = updatedPlace;
+
+	const updatedPlace = { ...PLACES[placeIdx] };
+	const allowed = ["title", "description"];
+	for (const [key, val] of Object.entries(req.body)) {
+		if (allowed.includes(key)) {
+			updatedPlace[key] = val;
+		}
+	}
+	PLACES[placeIdx] = updatedPlace;
+
+	return res.json({ ok: true, data: updatedPlace });
+}
+
+export function deletePlace(req, res, next) {
+	const { id } = req.params;
 }

@@ -10,7 +10,7 @@ export const USERS = [
 
 export const PLACES = [
 	{
-		id: 1,
+		id: "733f3f2a-fd07-4e30-9767-874d21075747",
 		userId: 1,
 		title: "Empire State Building 1",
 		description: "One of the most famous skyscrapers in the world!",
@@ -23,7 +23,7 @@ export const PLACES = [
 		},
 	},
 	{
-		id: 2,
+		id: "ce393340-587e-4fa2-b310-59c0912283a8",
 		userId: 1,
 		title: "Empire State Building 2",
 		description: "One of the most famous skyscrapers in the world!",
@@ -36,7 +36,7 @@ export const PLACES = [
 		},
 	},
 	{
-		id: 3,
+		id: "5a28703c-527b-4a15-9bbf-2c401d2d62df",
 		userId: 2,
 		title: "Empire State Building 3",
 		description: "One of the most famous skyscrapers in the world!",
