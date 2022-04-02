@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import { v4 as uuidv4 } from "uuid";
-import { PLACES } from "../dummyData.js";
 import HttpError from "../models/httpError.js";
+import { PLACES } from "../utils/dummyData.js";
 import { getCoordinatesForAddress } from "../utils/geo.js";
 
 export function getPlaces(req, res, next) {

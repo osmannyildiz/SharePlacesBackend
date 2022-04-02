@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import { v4 as uuidv4 } from "uuid";
-import { USERS } from "../dummyData.js";
 import HttpError from "../models/httpError.js";
+import { USERS } from "../utils/dummyData.js";
 
 export function getUsers(req, res, next) {
 	let users = USERS;

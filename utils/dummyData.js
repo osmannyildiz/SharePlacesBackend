@@ -11,7 +11,7 @@ export const USERS = [
 	{
 		id: "9fc3657e-f3d2-4eb7-9be9-a0ec38f90c48",
 		name: "Manu",
-		email: "max@example.com",
+		email: "manu@example.com",
 		password: "testing",
 		imageUrl:
 			"https://cdn.pixabay.com/photo/2017/06/05/07/58/butterfly-2373175_960_720.png",
