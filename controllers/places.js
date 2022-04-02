@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { v4 as uuidv4 } from "uuid";
 import { PLACES } from "../dummyData.js";
 import HttpError from "../models/httpError.js";
+import { getCoordinatesForAddress } from "../utils/geo.js";
 
 export function getPlaces(req, res, next) {
 	const { userId } = req.query;
@@ -30,12 +31,19 @@ export function getPlace(req, res, next) {
 	return res.json({ ok: true, data: place });
 }
 
-export function createPlace(req, res, next) {
+export async function createPlace(req, res, next) {
 	const validationErrors = validationResult(req);
 	if (!validationErrors.isEmpty()) {
 		return next(
 			new HttpError(400, "The input data is invalid.", validationErrors)
 		);
+	}
+
+	let coordinates;
+	try {
+		coordinates = await getCoordinatesForAddress(req.body.address);
+	} catch (err) {
+		return next(err);
 	}
 
 	const place = {
@@ -45,7 +53,7 @@ export function createPlace(req, res, next) {
 		description: req.body.description,
 		// imageUrl: req.body.imageUrl,
 		address: req.body.address,
-		// coordinates: req.body.coordinates,
+		coordinates: coordinates,
 	};
 
 	PLACES.push(place);
