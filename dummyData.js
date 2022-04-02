@@ -1,7 +1,18 @@
 export const USERS = [
 	{
-		id: 1,
+		id: "424d3eca-a195-4bdd-8698-fe0deea25fc8",
 		name: "Max Schwarz",
+		email: "max@example.com",
+		password: "testers",
+		imageUrl:
+			"https://cdn.pixabay.com/photo/2017/06/05/07/58/butterfly-2373175_960_720.png",
+		placeCount: 5,
+	},
+	{
+		id: "9fc3657e-f3d2-4eb7-9be9-a0ec38f90c48",
+		name: "Manu",
+		email: "max@example.com",
+		password: "testing",
 		imageUrl:
 			"https://cdn.pixabay.com/photo/2017/06/05/07/58/butterfly-2373175_960_720.png",
 		placeCount: 5,
@@ -11,7 +22,7 @@ export const USERS = [
 export const PLACES = [
 	{
 		id: "733f3f2a-fd07-4e30-9767-874d21075747",
-		userId: 1,
+		userId: "424d3eca-a195-4bdd-8698-fe0deea25fc8",
 		title: "Empire State Building 1",
 		description: "One of the most famous skyscrapers in the world!",
 		imageUrl:
@@ -24,7 +35,7 @@ export const PLACES = [
 	},
 	{
 		id: "ce393340-587e-4fa2-b310-59c0912283a8",
-		userId: 1,
+		userId: "424d3eca-a195-4bdd-8698-fe0deea25fc8",
 		title: "Empire State Building 2",
 		description: "One of the most famous skyscrapers in the world!",
 		imageUrl:
@@ -37,7 +48,7 @@ export const PLACES = [
 	},
 	{
 		id: "5a28703c-527b-4a15-9bbf-2c401d2d62df",
-		userId: 2,
+		userId: "9fc3657e-f3d2-4eb7-9be9-a0ec38f90c48",
 		title: "Empire State Building 3",
 		description: "One of the most famous skyscrapers in the world!",
 		imageUrl:

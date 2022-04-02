@@ -8,7 +8,7 @@ export function getPlaces(req, res, next) {
 	let places = PLACES;
 
 	if (userId) {
-		places = places.filter((place) => place.userId === parseInt(userId));
+		places = places.filter((place) => place.userId === userId);
 	}
 
 	if (!places.length) {
@@ -32,7 +32,7 @@ export function getPlace(req, res, next) {
 export function createPlace(req, res, next) {
 	const place = {
 		id: uuidv4(),
-		userId: 1, // TODO
+		userId: "424d3eca-a195-4bdd-8698-fe0deea25fc8", // TODO
 		title: req.body.title,
 		description: req.body.description,
 		imageUrl: req.body.imageUrl,
