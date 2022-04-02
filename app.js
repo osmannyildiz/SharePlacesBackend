@@ -24,6 +24,7 @@ app.use((error, req, res, next) => {
 	res.json({
 		ok: false,
 		message: error.message || "An unknown error occurred.",
+		data: error.data,
 	});
 });
 
