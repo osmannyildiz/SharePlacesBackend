@@ -54,6 +54,13 @@ export function createPlace(req, res, next) {
 }
 
 export function updatePlace(req, res, next) {
+	const validationErrors = validationResult(req);
+	if (!validationErrors.isEmpty()) {
+		return next(
+			new HttpError(400, "The input data is invalid.", validationErrors)
+		);
+	}
+
 	const { id } = req.params;
 
 	const placeIdx = PLACES.findIndex((place) => place.id === id);

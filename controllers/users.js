@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import { v4 as uuidv4 } from "uuid";
 import { USERS } from "../dummyData.js";
 import HttpError from "../models/httpError.js";
@@ -13,6 +14,13 @@ export function getUsers(req, res, next) {
 }
 
 export function register(req, res, next) {
+	const validationErrors = validationResult(req);
+	if (!validationErrors.isEmpty()) {
+		return next(
+			new HttpError(400, "The input data is invalid.", validationErrors)
+		);
+	}
+
 	const emailExists = USERS.find((user) => user.email === req.body.email);
 	if (emailExists) {
 		return next(

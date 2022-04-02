@@ -22,7 +22,11 @@ placesRouter.post(
 );
 
 placesRouter.get("/:id", getPlace);
-placesRouter.patch("/:id", updatePlace);
+placesRouter.patch(
+	"/:id",
+	[check("title").notEmpty(), check("description").isLength({ min: 5 })],
+	updatePlace
+);
 placesRouter.delete("/:id", deletePlace);
 
 export default placesRouter;
