@@ -1,7 +1,6 @@
 import { validationResult } from "express-validator";
 import HttpError from "../models/httpError.js";
 import { Place } from "../models/place.js";
-import { PLACES } from "../utils/dummyData.js";
 import { getCoordinatesForAddress } from "../utils/geo.js";
 
 export async function getPlaces(req, res, next) {
@@ -117,17 +116,25 @@ export async function updatePlace(req, res, next) {
 	return res.json({ ok: true, data: place.toObject({ getters: true }) });
 }
 
-export function deletePlace(req, res, next) {
+export async function deletePlace(req, res, next) {
 	const { id } = req.params;
 
-	// PLACES = PLACES.filter((place) => place.id !== id);
+	let place;
+	try {
+		place = await Place.findById(id);
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
 
-	const placeIdx = PLACES.findIndex((place) => place.id === id);
-	if (placeIdx === -1) {
+	if (!place) {
 		return next(new HttpError(404, "This place doesn't exist."));
 	}
 
-	PLACES.splice(placeIdx, 1);
+	try {
+		await place.remove();
+	} catch (err) {
+		return next(new HttpError(500, "Could not delete place."));
+	}
 
 	return res.json({ ok: true });
 }
