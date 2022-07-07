@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
-import { v4 as uuidv4 } from "uuid";
 import HttpError from "../models/httpError.js";
+import { User } from "../models/user.js";
 import { USERS } from "../utils/dummyData.js";
 
 export function getUsers(req, res, next) {
@@ -13,7 +13,7 @@ export function getUsers(req, res, next) {
 	return res.json({ ok: true, data: users });
 }
 
-export function register(req, res, next) {
+export async function register(req, res, next) {
 	const validationErrors = validationResult(req);
 	if (!validationErrors.isEmpty()) {
 		return next(
@@ -21,23 +21,36 @@ export function register(req, res, next) {
 		);
 	}
 
-	const emailExists = USERS.find((user) => user.email === req.body.email);
+	let emailExists;
+	try {
+		emailExists = await User.findOne({ email: req.body.email });
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
 	if (emailExists) {
 		return next(
-			new HttpError(400, "There is already a user registered with this email.")
+			new HttpError(422, "There is already a user registered with this email.")
 		);
 	}
 
-	const user = {
-		id: uuidv4(),
+	const user = new User({
 		name: req.body.name,
 		email: req.body.email,
 		password: req.body.password,
-	};
+		imageUrl: req.body.imageUrl,
+		places: "to be implemented",
+	});
 
-	USERS.push(user);
+	try {
+		await user.save();
+	} catch (err) {
+		console.error(err);
+		return next(new HttpError(500, "Could not create user."));
+	}
 
-	return res.status(201).json({ ok: true, data: user });
+	return res
+		.status(201)
+		.json({ ok: true, data: user.toObject({ getters: true }) });
 }
 
 export function login(req, res, next) {
