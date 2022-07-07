@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
-import { v4 as uuidv4 } from "uuid";
 import HttpError from "../models/httpError.js";
+import { Place } from "../models/place.js";
 import { PLACES } from "../utils/dummyData.js";
 import { getCoordinatesForAddress } from "../utils/geo.js";
 
@@ -46,17 +46,20 @@ export async function createPlace(req, res, next) {
 		return next(err);
 	}
 
-	const place = {
-		id: uuidv4(),
+	const place = new Place({
 		userId: "424d3eca-a195-4bdd-8698-fe0deea25fc8", // TODO
 		title: req.body.title,
 		description: req.body.description,
-		// imageUrl: req.body.imageUrl,
+		imageUrl: req.body.imageUrl,
 		address: req.body.address,
 		coordinates: coordinates,
-	};
+	});
 
-	PLACES.push(place);
+	try {
+		await place.save();
+	} catch (err) {
+		return next(new HttpError(500, "Could not create place."));
+	}
 
 	return res.status(201).json({ ok: true, data: place });
 }
