@@ -4,20 +4,28 @@ import { Place } from "../models/place.js";
 import { PLACES } from "../utils/dummyData.js";
 import { getCoordinatesForAddress } from "../utils/geo.js";
 
-export function getPlaces(req, res, next) {
+export async function getPlaces(req, res, next) {
 	const { userId } = req.query;
 
-	let places = PLACES;
-
-	if (userId) {
-		places = places.filter((place) => place.userId === userId);
+	let places;
+	try {
+		if (userId) {
+			places = await Place.find({ userId });
+		} else {
+			places = await Place.find();
+		}
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
 	}
 
 	if (!places.length) {
 		return next(new HttpError(404, "No place found."));
 	}
 
-	return res.json({ ok: true, data: places });
+	return res.json({
+		ok: true,
+		data: places.map((place) => place.toObject({ getters: true })),
+	});
 }
 
 export async function getPlace(req, res, next) {
