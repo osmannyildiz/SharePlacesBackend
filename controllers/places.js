@@ -20,15 +20,21 @@ export function getPlaces(req, res, next) {
 	return res.json({ ok: true, data: places });
 }
 
-export function getPlace(req, res, next) {
+export async function getPlace(req, res, next) {
 	const { id } = req.params;
 
-	const place = PLACES.find((place) => place.id === id);
+	let place;
+	try {
+		place = await Place.findById(id);
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+
 	if (!place) {
 		return next(new HttpError(404, "This place doesn't exist."));
 	}
 
-	return res.json({ ok: true, data: place });
+	return res.json({ ok: true, data: place.toObject({ getters: true }) });
 }
 
 export async function createPlace(req, res, next) {
