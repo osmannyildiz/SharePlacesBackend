@@ -6,6 +6,7 @@ specifiers:
   express: ^4.17.3
   express-validator: ^6.14.0
   mongoose: ^6.4.3
+  mongoose-unique-validator: ^3.1.0
   nodemon: ^2.0.15
   uuid: ^8.3.2
 
@@ -15,6 +16,7 @@ dependencies:
   express: 4.18.1
   express-validator: 6.14.1
   mongoose: 6.4.3
+  mongoose-unique-validator: 3.1.0_mongoose@6.4.3
   uuid: 8.3.2
 
 devDependencies:
@@ -740,6 +742,18 @@ packages:
       package-json: 6.5.0
     dev: true
 
+  /lodash.foreach/4.5.0:
+    resolution: {integrity: sha512-aEXTF4d+m05rVOAUG3z4vZZ4xVexLKZGF0lIxuHZ1Hplpk/3B6Z1+/ICICYRLm7c41Z2xiejbkCkJoTlypoXhQ==}
+    dev: false
+
+  /lodash.get/4.4.2:
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    dev: false
+
+  /lodash.merge/4.6.2:
+    resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+    dev: false
+
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: false
@@ -837,6 +851,17 @@ packages:
       socks: 2.6.2
     optionalDependencies:
       saslprep: 1.0.3
+    dev: false
+
+  /mongoose-unique-validator/3.1.0_mongoose@6.4.3:
+    resolution: {integrity: sha512-UsBBlFapip8gc8x1h+nLWnkOy+GTy9Z+zmTyZ35icLV3EoLIVz180vJzepfMM9yBy2AJh+maeuoM8CWtqejGUg==}
+    peerDependencies:
+      mongoose: ^6.0.0
+    dependencies:
+      lodash.foreach: 4.5.0
+      lodash.get: 4.4.2
+      lodash.merge: 4.6.2
+      mongoose: 6.4.3
     dev: false
 
   /mongoose/6.4.3:
