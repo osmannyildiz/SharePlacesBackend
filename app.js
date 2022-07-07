@@ -1,5 +1,7 @@
 import bodyParser from "body-parser";
+import "dotenv/config";
 import express from "express";
+import mongoose from "mongoose";
 import HttpError from "./models/httpError.js";
 import placesRouter from "./routes/places.js";
 import usersRouter from "./routes/users.js";
@@ -28,4 +30,10 @@ app.use((error, req, res, next) => {
 	});
 });
 
-app.listen(5000);
+const mongoUrl = `mongodb://127.0.0.1/yourplaces`;
+mongoose
+	.connect(mongoUrl)
+	.then(() => {
+		app.listen(5000, () => console.log("Listening on :5000"));
+	})
+	.catch((err) => console.error(err));

@@ -12,8 +12,10 @@
 	"license": "ISC",
 	"dependencies": {
 		"body-parser": "^1.19.2",
+		"dotenv": "^16.0.1",
 		"express": "^4.17.3",
 		"express-validator": "^6.14.0",
+		"mongoose": "^6.4.3",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
