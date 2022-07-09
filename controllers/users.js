@@ -45,7 +45,7 @@ export async function register(req, res, next) {
 		email: req.body.email,
 		password: req.body.password,
 		imageUrl: req.body.imageUrl,
-		places: "to be implemented",
+		places: [],
 	});
 
 	try {
