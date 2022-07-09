@@ -1,16 +1,23 @@
 import { validationResult } from "express-validator";
 import HttpError from "../models/httpError.js";
 import { User } from "../models/user.js";
-import { USERS } from "../utils/dummyData.js";
 
-export function getUsers(req, res, next) {
-	let users = USERS;
+export async function getUsers(req, res, next) {
+	let users;
+	try {
+		users = await User.find({}, "-password");
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
 
-	if (!users.length) {
+	if (!users || !users.length) {
 		return next(new HttpError(404, "No user found."));
 	}
 
-	return res.json({ ok: true, data: users });
+	return res.json({
+		ok: true,
+		data: users.map((user) => user.toObject({ getters: true })),
+	});
 }
 
 export async function register(req, res, next) {
@@ -73,5 +80,9 @@ export async function login(req, res, next) {
 		return next(new HttpError(401, "The password is incorrect."));
 	}
 
-	return res.json({ ok: true, message: "Logged in.", data: user });
+	return res.json({
+		ok: true,
+		message: "Logged in.",
+		data: user.toObject({ getters: true }),
+	});
 }
