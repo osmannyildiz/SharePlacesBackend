@@ -53,17 +53,23 @@ export async function register(req, res, next) {
 		.json({ ok: true, data: user.toObject({ getters: true }) });
 }
 
-export function login(req, res, next) {
-	const user = USERS.find((user) => user.email === req.body.email);
+export async function login(req, res, next) {
+	let user;
+	try {
+		user = await User.findOne({ email: req.body.email });
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+
 	if (!user) {
-		// TODO Change message
+		// TODO Change message (make it obscure)
 		return next(
 			new HttpError(401, "There isn't a user registered with this email.")
 		);
 	}
 
 	if (user.password !== req.body.password) {
-		// TODO Change message
+		// TODO Change message (make it obscure)
 		return next(new HttpError(401, "The password is incorrect."));
 	}
 
