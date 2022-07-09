@@ -1,6 +1,8 @@
 import { validationResult } from "express-validator";
+import mongoose from "mongoose";
 import HttpError from "../models/httpError.js";
-import { Place } from "../models/place.js";
+import Place from "../models/place.js";
+import User from "../models/user.js";
 import { getCoordinatesForAddress } from "../utils/geo.js";
 
 export async function getPlaces(req, res, next) {
@@ -52,6 +54,20 @@ export async function createPlace(req, res, next) {
 		);
 	}
 
+	// Check if the user exists (and authenticated)
+	let user;
+	try {
+		user = await User.findById(req.body.userId); // TODO
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+	if (!user) {
+		// TODO Change message (make it obscure)
+		return next(
+			new HttpError(401, "There isn't a user registered with this ID.")
+		);
+	}
+
 	let coordinates;
 	try {
 		coordinates = await getCoordinatesForAddress(req.body.address);
@@ -60,7 +76,7 @@ export async function createPlace(req, res, next) {
 	}
 
 	const place = new Place({
-		userId: "424d3eca-a195-4bdd-8698-fe0deea25fc8", // TODO
+		userId: req.body.userId, // TODO
 		title: req.body.title,
 		description: req.body.description,
 		imageUrl: req.body.imageUrl,
@@ -69,8 +85,17 @@ export async function createPlace(req, res, next) {
 	});
 
 	try {
-		await place.save();
+		const session = await mongoose.startSession();
+		session.startTransaction();
+
+		await place.save({ session });
+
+		user.places.push(place);
+		await user.save({ session });
+
+		await session.commitTransaction();
 	} catch (err) {
+		console.error(err);
 		return next(new HttpError(500, "Could not create place."));
 	}
 

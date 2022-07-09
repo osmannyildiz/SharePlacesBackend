@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import HttpError from "../models/httpError.js";
-import { User } from "../models/user.js";
+import User from "../models/user.js";
 
 export async function getUsers(req, res, next) {
 	let users;
