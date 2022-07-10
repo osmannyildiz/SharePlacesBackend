@@ -11,7 +11,7 @@ export async function getPlaces(req, res, next) {
 	let places;
 	try {
 		if (userId) {
-			places = await Place.find({ userId });
+			places = await Place.find({ user: userId });
 		} else {
 			places = await Place.find();
 		}
@@ -76,7 +76,7 @@ export async function createPlace(req, res, next) {
 	}
 
 	const place = new Place({
-		userId: req.body.userId, // TODO
+		user: req.body.userId, // TODO
 		title: req.body.title,
 		description: req.body.description,
 		imageUrl: req.body.imageUrl,
@@ -146,7 +146,7 @@ export async function deletePlace(req, res, next) {
 
 	let place;
 	try {
-		place = await Place.findById(id);
+		place = await Place.findById(id).populate("user");
 	} catch (err) {
 		return next(new HttpError(500, "Something went wrong."));
 	}
@@ -156,7 +156,15 @@ export async function deletePlace(req, res, next) {
 	}
 
 	try {
-		await place.remove();
+		const session = await mongoose.startSession();
+		session.startTransaction();
+
+		await place.remove({ session });
+
+		place.user.places.pull(place);
+		await place.user.save({ session });
+
+		await session.commitTransaction();
 	} catch (err) {
 		return next(new HttpError(500, "Could not delete place."));
 	}
