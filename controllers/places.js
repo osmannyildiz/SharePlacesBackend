@@ -81,7 +81,7 @@ export async function createPlace(req, res, next) {
 		user: req.body.userId, // TODO Auth
 		title: req.body.title,
 		description: req.body.description,
-		imageUrl: req.body.imageUrl,
+		imageUrl: "todo", // TODO req.body.imageUrl
 		address: req.body.address,
 		coordinates: coordinates,
 	});
