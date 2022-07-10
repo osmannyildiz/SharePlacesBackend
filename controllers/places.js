@@ -59,7 +59,7 @@ export async function createPlace(req, res, next) {
 	// Check if the user exists (and authenticated)
 	let user;
 	try {
-		user = await User.findById(req.body.userId); // TODO
+		user = await User.findById(req.body.userId); // TODO Auth
 	} catch (err) {
 		return next(new HttpError(500, "Something went wrong."));
 	}
@@ -78,7 +78,7 @@ export async function createPlace(req, res, next) {
 	}
 
 	const place = new Place({
-		user: req.body.userId, // TODO
+		user: req.body.userId, // TODO Auth
 		title: req.body.title,
 		description: req.body.description,
 		imageUrl: req.body.imageUrl,
