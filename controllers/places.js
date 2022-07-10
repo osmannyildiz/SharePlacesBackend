@@ -11,7 +11,9 @@ export async function getPlaces(req, res, next) {
 	let places;
 	try {
 		if (userId) {
-			places = await Place.find({ user: userId });
+			// places = await Place.find({ user: userId });
+			const user = await User.findById(userId).populate("places");
+			places = user ? user.places : [];
 		} else {
 			places = await Place.find();
 		}
@@ -95,7 +97,6 @@ export async function createPlace(req, res, next) {
 
 		await session.commitTransaction();
 	} catch (err) {
-		console.error(err);
 		return next(new HttpError(500, "Could not create place."));
 	}
 

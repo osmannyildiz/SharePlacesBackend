@@ -51,7 +51,6 @@ export async function register(req, res, next) {
 	try {
 		await user.save();
 	} catch (err) {
-		console.error(err);
 		return next(new HttpError(500, "Could not create user."));
 	}
 
