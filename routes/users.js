@@ -1,14 +1,14 @@
 import express from "express";
 import { check } from "express-validator";
 import { getUsers, login, register } from "../controllers/users.js";
-import fileUpload from "../middlewares/fileUpload.js";
+import imageUpload from "../middlewares/imageUpload.js";
 
 const usersRouter = express.Router();
 
 usersRouter.get("/", getUsers);
 usersRouter.post(
 	"/register",
-	fileUpload.single("image"),
+	imageUpload.single("image"),
 	[
 		check("name").notEmpty(),
 		check("email").normalizeEmail().isEmail(),
