@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import "dotenv/config";
 import express from "express";
+import fs from "fs";
 import mongoose from "mongoose";
 import HttpError from "./models/httpError.js";
 import placesRouter from "./routes/places.js";
@@ -20,6 +21,9 @@ app.use((req, res, next) => {
 	return next();
 });
 
+// Static files
+app.use("/static", express.static("static"));
+
 app.use("/api/users", usersRouter);
 app.use("/api/places", placesRouter);
 
@@ -30,6 +34,12 @@ app.use((req, res, next) => {
 
 // Handle errors
 app.use((error, req, res, next) => {
+	if (req.file) {
+		fs.unlink(req.file.path, (err) => {
+			if (err) console.error(err);
+		});
+	}
+
 	if (res.headerSent) {
 		return next(error);
 	}

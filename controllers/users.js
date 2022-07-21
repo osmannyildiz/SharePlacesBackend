@@ -44,6 +44,7 @@ export async function register(req, res, next) {
 		name: req.body.name,
 		email: req.body.email,
 		password: req.body.password,
+		imageUrl: req.file.path,
 		places: [],
 	});
 
