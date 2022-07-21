@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import fs from "fs";
 import mongoose from "mongoose";
 import HttpError from "../models/httpError.js";
 import Place from "../models/place.js";
@@ -152,6 +153,8 @@ export async function deletePlace(req, res, next) {
 		return next(new HttpError(404, "This place doesn't exist."));
 	}
 
+	const imagePath = place.imageUrl;
+
 	try {
 		const session = await mongoose.startSession();
 		session.startTransaction();
@@ -165,6 +168,10 @@ export async function deletePlace(req, res, next) {
 	} catch (err) {
 		return next(new HttpError(500, "Could not delete place."));
 	}
+
+	fs.unlink(imagePath, (err) => {
+		if (err) console.error(err);
+	});
 
 	return res.json({ ok: true });
 }
