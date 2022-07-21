@@ -7,12 +7,14 @@ import {
 	getPlaces,
 	updatePlace,
 } from "../controllers/places.js";
+import imageUpload from "../middlewares/imageUpload.js";
 
 const placesRouter = express.Router();
 
 placesRouter.get("/", getPlaces);
 placesRouter.post(
 	"/",
+	imageUpload.single("image"),
 	[
 		check("title").notEmpty(),
 		check("description").isLength({ min: 5 }),
