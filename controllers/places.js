@@ -53,10 +53,12 @@ export async function createPlace(req, res, next) {
 		);
 	}
 
+	const { userId } = req.tokenPayload;
+
 	// Check if the user exists (and authenticated)
 	let user;
 	try {
-		user = await User.findById(req.body.userId); // TODO Auth
+		user = await User.findById(userId);
 	} catch (err) {
 		return next(new HttpError(500, "Something went wrong."));
 	}
@@ -75,7 +77,7 @@ export async function createPlace(req, res, next) {
 	}
 
 	const place = new Place({
-		user: req.body.userId, // TODO Auth
+		user: userId,
 		title: req.body.title,
 		description: req.body.description,
 		imageUrl: req.file.path,
@@ -123,6 +125,17 @@ export async function updatePlace(req, res, next) {
 		return next(new HttpError(404, "This place doesn't exist."));
 	}
 
+	const { userId } = req.tokenPayload;
+
+	if (place.user.toString() !== userId) {
+		return next(
+			new HttpError(
+				401,
+				"You are not allowed to update places added by other users."
+			)
+		);
+	}
+
 	const allowed = ["title", "description"];
 	for (const [key, val] of Object.entries(req.body)) {
 		if (allowed.includes(key)) {
@@ -151,6 +164,17 @@ export async function deletePlace(req, res, next) {
 
 	if (!place) {
 		return next(new HttpError(404, "This place doesn't exist."));
+	}
+
+	const { userId } = req.tokenPayload;
+
+	if (place.user.id !== userId) {
+		return next(
+			new HttpError(
+				401,
+				"You are not allowed to delete places added by other users."
+			)
+		);
 	}
 
 	const imagePath = place.imageUrl;

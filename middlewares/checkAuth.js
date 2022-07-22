@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import HttpError from "../models/httpError.js";
 
 const checkAuth = (req, res, next) => {
 	if (req.method === "OPTIONS") {
@@ -6,12 +7,12 @@ const checkAuth = (req, res, next) => {
 	}
 
 	const error = new HttpError(
-		401,
+		403,
 		"Authentication failed. You must login or register to perform this operation."
 	);
 
 	try {
-		const token = req.headers["Authorization"].split(" ")[1];
+		const token = req.headers["authorization"].split(" ")[1];
 		if (!token) {
 			return next(error);
 		}

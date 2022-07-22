@@ -44,7 +44,7 @@ export async function register(req, res, next) {
 
 	let passwordHash;
 	try {
-		passwordHash = await bcrypt.hash(req.body.password);
+		passwordHash = await bcrypt.hash(req.body.password, 12);
 	} catch (err) {
 		return next(new HttpError(500, "Could not create user."));
 	}
@@ -95,7 +95,7 @@ export async function login(req, res, next) {
 	if (!user) {
 		// TODO Change message (make it obscure)
 		return next(
-			new HttpError(401, "There isn't a user registered with this email.")
+			new HttpError(403, "There isn't a user registered with this email.")
 		);
 	}
 
@@ -107,7 +107,7 @@ export async function login(req, res, next) {
 	}
 	if (!passwordIsCorrect) {
 		// TODO Change message (make it obscure)
-		return next(new HttpError(401, "The password is incorrect."));
+		return next(new HttpError(403, "The password is incorrect."));
 	}
 
 	let token;
