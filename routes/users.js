@@ -6,6 +6,7 @@ import imageUpload from "../middlewares/imageUpload.js";
 const usersRouter = express.Router();
 
 usersRouter.get("/", getUsers);
+
 usersRouter.post(
 	"/register",
 	imageUpload.single("image"),
@@ -16,6 +17,7 @@ usersRouter.post(
 	],
 	register
 );
+
 usersRouter.post("/login", login);
 
 export default usersRouter;
