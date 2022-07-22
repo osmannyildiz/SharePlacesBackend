@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import HttpError from "../models/httpError.js";
 import User from "../models/user.js";
 
@@ -62,9 +63,25 @@ export async function register(req, res, next) {
 		return next(new HttpError(500, "Could not create user."));
 	}
 
-	return res
-		.status(201)
-		.json({ ok: true, data: user.toObject({ getters: true }) });
+	let token;
+	try {
+		token = jwt.sign({ userId: user.id, email: user.email }, "s3cr3t", {
+			expiresIn: "1h",
+		});
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+
+	return res.status(201).json({
+		ok: true,
+		data: {
+			userId: user.id,
+			email: user.email,
+			name: user.name,
+			imageUrl: user.imageUrl,
+			token: token,
+		},
+	});
 }
 
 export async function login(req, res, next) {
@@ -93,9 +110,24 @@ export async function login(req, res, next) {
 		return next(new HttpError(401, "The password is incorrect."));
 	}
 
+	let token;
+	try {
+		token = jwt.sign({ userId: user.id, email: user.email }, "s3cr3t", {
+			expiresIn: "1h",
+		});
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+
 	return res.json({
 		ok: true,
 		message: "Logged in.",
-		data: user.toObject({ getters: true }),
+		data: {
+			userId: user.id,
+			email: user.email,
+			name: user.name,
+			imageUrl: user.imageUrl,
+			token: token,
+		},
 	});
 }
