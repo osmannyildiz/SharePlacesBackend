@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 import HttpError from "../models/httpError.js";
 import User from "../models/user.js";
@@ -40,10 +41,17 @@ export async function register(req, res, next) {
 		);
 	}
 
+	let passwordHash;
+	try {
+		passwordHash = await bcrypt.hash(req.body.password);
+	} catch (err) {
+		return next(new HttpError(500, "Could not create user."));
+	}
+
 	const user = new User({
 		name: req.body.name,
 		email: req.body.email,
-		password: req.body.password,
+		password: passwordHash,
 		imageUrl: req.file.path,
 		places: [],
 	});
@@ -74,7 +82,13 @@ export async function login(req, res, next) {
 		);
 	}
 
-	if (user.password !== req.body.password) {
+	let passwordIsCorrect;
+	try {
+		passwordIsCorrect = await bcrypt.compare(req.body.password, user.password);
+	} catch (err) {
+		return next(new HttpError(500, "Something went wrong."));
+	}
+	if (!passwordIsCorrect) {
 		// TODO Change message (make it obscure)
 		return next(new HttpError(401, "The password is incorrect."));
 	}
