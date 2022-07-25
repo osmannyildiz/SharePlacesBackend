@@ -52,9 +52,10 @@ app.use((error, req, res, next) => {
 	});
 });
 
+const PORT = process.env.PORT || 5000;
 mongoose
 	.connect(process.env.MONGODB_CONNECTION_STRING)
 	.then(() => {
-		app.listen(5000, () => console.log("Listening on :5000"));
+		app.listen(PORT, () => console.log(`Listening on :${PORT}`));
 	})
 	.catch((err) => console.error(err));
