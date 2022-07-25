@@ -16,7 +16,7 @@ const checkAuth = (req, res, next) => {
 		if (!token) {
 			return next(error);
 		}
-		const payload = jwt.verify(token, "s3cr3t");
+		const payload = jwt.verify(token, process.env.JWT_KEY);
 
 		req.tokenPayload = payload;
 		return next();

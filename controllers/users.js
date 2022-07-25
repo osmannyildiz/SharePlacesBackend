@@ -65,9 +65,13 @@ export async function register(req, res, next) {
 
 	let token;
 	try {
-		token = jwt.sign({ userId: user.id, email: user.email }, "s3cr3t", {
-			expiresIn: "1h",
-		});
+		token = jwt.sign(
+			{ userId: user.id, email: user.email },
+			process.env.JWT_KEY,
+			{
+				expiresIn: "1h",
+			}
+		);
 	} catch (err) {
 		return next(new HttpError(500, "Something went wrong."));
 	}
@@ -112,9 +116,13 @@ export async function login(req, res, next) {
 
 	let token;
 	try {
-		token = jwt.sign({ userId: user.id, email: user.email }, "s3cr3t", {
-			expiresIn: "1h",
-		});
+		token = jwt.sign(
+			{ userId: user.id, email: user.email },
+			process.env.JWT_KEY,
+			{
+				expiresIn: "1h",
+			}
+		);
 	} catch (err) {
 		return next(new HttpError(500, "Something went wrong."));
 	}

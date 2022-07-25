@@ -52,7 +52,7 @@ app.use((error, req, res, next) => {
 	});
 });
 
-const mongoUrl = `mongodb://127.0.0.1/yourplaces?replicaSet=rs0`;
+const mongoUrl = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}?replicaSet=rs0`;
 mongoose
 	.connect(mongoUrl)
 	.then(() => {
