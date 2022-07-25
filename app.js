@@ -52,9 +52,8 @@ app.use((error, req, res, next) => {
 	});
 });
 
-const mongoUrl = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}?replicaSet=rs0`;
 mongoose
-	.connect(mongoUrl)
+	.connect(process.env.MONGODB_CONNECTION_STRING)
 	.then(() => {
 		app.listen(5000, () => console.log("Listening on :5000"));
 	})
