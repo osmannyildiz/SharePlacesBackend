@@ -52,6 +52,12 @@ app.use((error, req, res, next) => {
 	});
 });
 
+// Create the image upload dir if it doesn't exist
+// https://stackoverflow.com/a/26815894
+if (!fs.existsSync(process.env.IMAGE_UPLOAD_DIR)) {
+	fs.mkdirSync(process.env.IMAGE_UPLOAD_DIR, { recursive: true });
+}
+
 const PORT = process.env.PORT || 5000;
 mongoose
 	.connect(process.env.MONGODB_CONNECTION_STRING)
