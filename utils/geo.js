@@ -5,7 +5,7 @@ export async function getCoordinatesForAddress(address) {
 	await new Promise((resolve) => setTimeout(resolve, 2000));
 
 	return {
-		lat: (Math.random() * 240 - 80).toFixed(7),
-		lng: (Math.random() * 240 - 80).toFixed(7),
+		lat: (Math.random() * 60).toFixed(7),
+		lng: (Math.random() * 60).toFixed(7),
 	};
 }
