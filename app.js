@@ -3,39 +3,34 @@ import "dotenv/config";
 import express from "express";
 import fs from "fs";
 import mongoose from "mongoose";
-import path from "path";
+import HttpError from "./models/httpError.js";
 import placesRouter from "./routes/places.js";
 import usersRouter from "./routes/users.js";
 
 const app = express();
 app.use(bodyParser.json());
 
-// // CORS
-// app.use((req, res, next) => {
-// 	res.setHeader("Access-Control-Allow-Origin", "*");
-// 	res.setHeader(
-// 		"Access-Control-Allow-Headers",
-// 		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
-// 	);
-// 	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-// 	return next();
-// });
+// CORS
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+	);
+	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+	return next();
+});
 
 // Static files
 app.use("/static", express.static("static"));
-app.use(express.static("public"));
 
 app.use("/api/users", usersRouter);
 app.use("/api/places", placesRouter);
 
+// Catch unimplemented routes
 app.use((req, res, next) => {
-	return res.sendFile(path.resolve("public/index.html"));
+	return next(new HttpError(404, "Not found."));
 });
-
-// // Catch unimplemented routes
-// app.use((req, res, next) => {
-// 	return next(new HttpError(404, "Not found."));
-// });
 
 // Handle errors
 app.use((error, req, res, next) => {
