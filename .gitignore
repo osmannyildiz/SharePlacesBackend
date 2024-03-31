@@ -138,7 +138,6 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node
 
 
-_gitignored
-.env*
+.env
 /static/uploads
 
